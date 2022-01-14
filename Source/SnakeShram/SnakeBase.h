@@ -5,6 +5,8 @@
 #include "GameFramework/Actor.h"
 #include "SnakeBase.generated.h"
 
+class ASnakeElementBase;
+
 UCLASS()
 class SNAKESHRAM_API ASnakeBase : public AActor
 {
@@ -12,6 +14,9 @@ class SNAKESHRAM_API ASnakeBase : public AActor
 	
 public:	
 	ASnakeBase();
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ASnakeElementBase> SnakeElementClass;
 
 protected:
 	virtual void BeginPlay() override;

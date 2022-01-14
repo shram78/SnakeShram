@@ -1,5 +1,6 @@
 
 #include "SnakeBase.h"
+#include "SnakeElementBase.h"
 
 ASnakeBase::ASnakeBase()
 {
@@ -10,6 +11,8 @@ ASnakeBase::ASnakeBase()
 void ASnakeBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, GetActorTransform());
 	
 }
 
