@@ -12,16 +12,17 @@ ASnakeBase::ASnakeBase()
 
 void ASnakeBase::BeginPlay()
 {
-	int StartElementSnake = 4;
+	int StartElementSnake = 5;
 	Super::BeginPlay();
+	SetActorTickInterval(MovementSpeed);
 
-	AddSnakeElement(StartElementSnake); 
+	AddSnakeElement(StartElementSnake);
 }
 
 void ASnakeBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	Move(DeltaTime);
+	Move();
 }
 
 void ASnakeBase::AddSnakeElement(int ElementNum)
@@ -31,31 +32,40 @@ void ASnakeBase::AddSnakeElement(int ElementNum)
 		FVector NewLocation(SnakeElements.Num() * ElementSize, 0, 0);
 		FTransform NewTransform(NewLocation);
 		ASnakeElementBase* NewSnakeElement = GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, NewTransform);
-		NewSnakeElement->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		SnakeElements.Add(NewSnakeElement);
 	}
 }
 
-void ASnakeBase::Move(float DeltaTime)
+void ASnakeBase::Move()
 {
 	FVector MovementVector;
-	float MovementSpeedDelta = MovementSpeed * DeltaTime;
+	float MovemenSpeed = ElementSize;
 
 	switch (LastMoveDirection)
 	{
 	case EMovementDirection::UP:
-		MovementVector.X += MovementSpeedDelta;
+		MovementVector.X += MovemenSpeed;
 		break;
 	case EMovementDirection::DOWN:
-		MovementVector.X -= MovementSpeedDelta;
+		MovementVector.X -= MovemenSpeed;
 		break;
 	case EMovementDirection::LEFT:
-		MovementVector.Y += MovementSpeedDelta;
+		MovementVector.Y += MovemenSpeed;
 		break;
 	case EMovementDirection::RIGHT:
-		MovementVector.Y -= MovementSpeedDelta;
+		MovementVector.Y -= MovemenSpeed;
 		break;
 	}
 
-	AddActorWorldOffset(MovementVector);
+	//AddActorWorldOffset(MovementVector);
+
+	for (int i = SnakeElements.Num() - 1; i > 0; i--)
+	{
+		auto CurrentElement = SnakeElements[i];
+		auto PreviousElement = SnakeElements[i - 1];
+		FVector PreviousLocation = PreviousElement->GetActorLocation();
+		CurrentElement->SetActorLocation(PreviousLocation);
+	}
+
+	SnakeElements[0]->AddActorWorldOffset(MovementVector);
 }

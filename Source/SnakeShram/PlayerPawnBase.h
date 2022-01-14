@@ -1,6 +1,4 @@
-
 #pragma once
-
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "PlayerPawnBase.generated.h"
@@ -23,7 +21,7 @@ public:
 		ASnakeBase* SnakeActor;
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ASnakeBase> SnakeActorClass;
+		TSubclassOf<ASnakeBase> SnakeActorClass;
 
 
 protected:
@@ -36,4 +34,9 @@ public:
 
 	void CreateSnakeActor();
 
+	UFUNCTION()
+	void HandlePlayerVerticalInput(float value);
+
+	UFUNCTION()
+	void HandlePlayerHorizontalInput(float value);
 };
