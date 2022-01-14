@@ -6,6 +6,7 @@
 #include "PlayerPawnBase.generated.h"
 
 class UCameraComponent;
+class ASnakeBase;
 
 UCLASS()
 class SNAKESHRAM_API APlayerPawnBase : public APawn
@@ -16,14 +17,23 @@ public:
 	APlayerPawnBase();
 
 	UPROPERTY(BlueprintReadWrite)
-	UCameraComponent* PawnCamera;
+		UCameraComponent* PawnCamera;
+
+	UPROPERTY(BlueprintReadWrite)
+		ASnakeBase* SnakeActor;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ASnakeBase> SnakeActorClass;
+
 
 protected:
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void CreateSnakeActor();
 
 };

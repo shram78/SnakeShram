@@ -18,8 +18,6 @@ void APlayerPawnBase::BeginPlay()
 
 	SetActorRotation(FRotator(-90, 0, 0));
 
-	CreateSnakeActor();
-
 }
 
 void APlayerPawnBase::Tick(float DeltaTime)
