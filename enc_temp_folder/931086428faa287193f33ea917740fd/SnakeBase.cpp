@@ -15,7 +15,7 @@ void ASnakeBase::BeginPlay()
 	int StartElementSnake = 4;
 	Super::BeginPlay();
 
-	AddSnakeElement(StartElementSnake); 
+	AddSnakeElement(StartElementSnake); // убрать магическое число
 }
 
 void ASnakeBase::Tick(float DeltaTime)

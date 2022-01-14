@@ -7,6 +7,15 @@
 
 class ASnakeElementBase;
 
+UENUM()
+enum class EMovementDirection
+{
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
+};
+
 UCLASS()
 class SNAKESHRAM_API ASnakeBase : public AActor
 {
@@ -21,10 +30,14 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	float ElementSize;
 
+	UPROPERTY(EditDefaultsOnly)
+	float MovementSpeed;
+
 	UPROPERTY()
 	TArray<ASnakeElementBase*> SnakeElements;
 
-
+	UPROPERTY()
+	EMovementDirection LastMoveDirection;
 
 protected:
 	virtual void BeginPlay() override;
@@ -34,4 +47,5 @@ public:
 
 	void AddSnakeElement(int ElementNum = 1);
 
+	void Move(float DeltaTime);
 };
