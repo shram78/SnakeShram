@@ -7,7 +7,7 @@ ASnakeBase::ASnakeBase()
 
 	ElementSize = 100.f;
 	MovementSpeed = 10.f;
-	LastMoveDirection = EMovementDirection::UP;
+	LastMoveDirection = EMovementDirection::DOWN;
 }
 
 void ASnakeBase::BeginPlay()
@@ -32,7 +32,12 @@ void ASnakeBase::AddSnakeElement(int ElementNum)
 		FVector NewLocation(SnakeElements.Num() * ElementSize, 0, 0);
 		FTransform NewTransform(NewLocation);
 		ASnakeElementBase* NewSnakeElement = GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, NewTransform);
-		SnakeElements.Add(NewSnakeElement);
+		int32 ElementIndex = SnakeElements.Add(NewSnakeElement);
+
+		if (ElementIndex == 0)
+		{
+			NewSnakeElement->SetFirstElementType();
+		}
 	}
 }
 
@@ -56,8 +61,6 @@ void ASnakeBase::Move()
 		MovementVector.Y -= MovemenSpeed;
 		break;
 	}
-
-	//AddActorWorldOffset(MovementVector);
 
 	for (int i = SnakeElements.Num() - 1; i > 0; i--)
 	{
