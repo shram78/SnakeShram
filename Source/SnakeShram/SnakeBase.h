@@ -18,10 +18,20 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ASnakeElementBase> SnakeElementClass;
 
+	UPROPERTY(EditDefaultsOnly)
+	float ElementSize;
+
+	UPROPERTY()
+	TArray<ASnakeElementBase*> SnakeElements;
+
+
+
 protected:
 	virtual void BeginPlay() override;
 
 public:	
 	virtual void Tick(float DeltaTime) override;
+
+	void AddSnakeElement(int ElementNum = 1);
 
 };
