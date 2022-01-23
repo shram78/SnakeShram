@@ -16,13 +16,13 @@ public:
 	APlayerPawnBase();
 
 	UPROPERTY(BlueprintReadWrite)
-		UCameraComponent* PawnCamera;
+	UCameraComponent* PawnCamera;
 
 	UPROPERTY(BlueprintReadWrite)
-		ASnakeBase* SnakeActor;
+	ASnakeBase* SnakeActor;
 
 	UPROPERTY(EditDefaultsOnly)
-		TSubclassOf<ASnakeBase> SnakeActorClass;
+	TSubclassOf<ASnakeBase> SnakeActorClass;
 
 
 protected:

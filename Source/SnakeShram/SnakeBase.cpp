@@ -1,12 +1,13 @@
 #include "SnakeBase.h"
 #include "SnakeElementBase.h"
+#include "Interactable.h"
 
 ASnakeBase::ASnakeBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	ElementSize = 100.f;
-	MovementSpeed = 10.f;
+	ElementSize = 100.0f;
+	MovementSpeed = 10.0f;
 	LastMoveDirection = EMovementDirection::DOWN;
 }
 
@@ -32,6 +33,7 @@ void ASnakeBase::AddSnakeElement(int ElementNum)
 		FVector NewLocation(SnakeElements.Num() * ElementSize, 0, 0);
 		FTransform NewTransform(NewLocation);
 		ASnakeElementBase* NewSnakeElement = GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, NewTransform);
+		NewSnakeElement->SnakeOwner = this;
 		int32 ElementIndex = SnakeElements.Add(NewSnakeElement);
 
 		if (ElementIndex == 0)
@@ -43,22 +45,21 @@ void ASnakeBase::AddSnakeElement(int ElementNum)
 
 void ASnakeBase::Move()
 {
-	FVector MovementVector;
-	float MovemenSpeed = ElementSize;
+	FVector MovementVector(ForceInitToZero);
 
 	switch (LastMoveDirection)
 	{
 	case EMovementDirection::UP:
-		MovementVector.X += MovemenSpeed;
+		MovementVector.X += ElementSize;
 		break;
 	case EMovementDirection::DOWN:
-		MovementVector.X -= MovemenSpeed;
+		MovementVector.X -= ElementSize;
 		break;
 	case EMovementDirection::LEFT:
-		MovementVector.Y += MovemenSpeed;
+		MovementVector.Y += ElementSize;
 		break;
 	case EMovementDirection::RIGHT:
-		MovementVector.Y -= MovemenSpeed;
+		MovementVector.Y -= ElementSize;
 		break;
 	}
 
@@ -71,4 +72,20 @@ void ASnakeBase::Move()
 	}
 
 	SnakeElements[0]->AddActorWorldOffset(MovementVector);
+}
+
+void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other)
+{
+	if (IsValid(OverlappedElement))
+	{
+		int32 ElemIndex;
+		SnakeElements.Find(OverlappedElement, ElemIndex);
+		bool bIsFirst = ElemIndex == 0;
+
+		IInteractable* InteractableInterface = Cast<IInteractable>(Other);
+		if (InteractableInterface)
+		{
+			  InteractableInterface->Interact(this, bIsFirst);
+		}
+	}
 }
